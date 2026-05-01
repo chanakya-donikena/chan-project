@@ -77,6 +77,8 @@ PORT=3000
 
 Start the backend:
 
+use NodeJS 20.9.0
+
 ```bash
 npm start
 ```
