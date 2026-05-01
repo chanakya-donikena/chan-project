@@ -104,6 +104,7 @@ npx serve frontend
 
 > Note: The frontend makes API calls to `http://localhost:3000`. Make sure the backend is running before using the login/signup forms.
 
+In frontend/js/auth.js  ..,, change the IP address of API_BASE to backend address
 ---
 
 ## API Endpoints
