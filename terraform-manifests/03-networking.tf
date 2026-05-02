@@ -55,6 +55,13 @@ resource "azurerm_network_security_group" "dbSubnet-nsg" {
   }
 }
 
+
+# Network Security Group Association (DB)
+resource "azurerm_subnet_network_security_group_association" "db-association-nsg" {
+  subnet_id                 = azurerm_subnet.dbSubnet.id
+  network_security_group_id = azurerm_network_security_group.dbSubnet-nsg.id
+}
+
 resource "azurerm_network_security_group" "appSubnet-nsg" {
   name                = "App-Subnet-NSG"
   location            = var.resource_group_location
@@ -77,6 +84,13 @@ resource "azurerm_network_security_group" "appSubnet-nsg" {
     department  = "Engineering"
   }
 }
+
+# Network Security Group Association (APP)
+resource "azurerm_subnet_network_security_group_association" "app-association-nsg" {
+  subnet_id                 = azurerm_subnet.appSubnet.id
+  network_security_group_id = azurerm_network_security_group.appSubnet-nsg.id
+}
+
 
 resource "azurerm_network_security_group" "webSubnet-nsg" {
   name                = "Web-Subnet-NSG"
@@ -111,4 +125,10 @@ resource "azurerm_network_security_group" "webSubnet-nsg" {
     environment = "Development"
     department  = "Engineering"
   }
+}
+
+# Network Security Group Association (WEB)
+resource "azurerm_subnet_network_security_group_association" "web-association-nsg" {
+  subnet_id                 = azurerm_subnet.webSubnet.id
+  network_security_group_id = azurerm_network_security_group.webSubnet-nsg.id
 }
