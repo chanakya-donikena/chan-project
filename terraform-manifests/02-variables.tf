@@ -1,11 +1,11 @@
-variable "chan_rg_name" {
-  description = "This is the resource group name"
-  type = string
-  default = "kml_rg_main-3434de88bd154e65"
+variable "resource_group_name" {
+  description = "Resource Group Name"
+  type        = string
+  default     = "kml_rg_main-651b379af3154b50"
 }
 
-variable "chan_rg_location" {
-  description = "This is the Resource Group Location"
-  type = string
-  default = "eastus"
+variable "resource_group_location" {
+  description = "Resource Group Location"
+  type        = string
+  default     = "East US"
 }
