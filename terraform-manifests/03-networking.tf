@@ -32,6 +32,14 @@ resource "azurerm_subnet" "dbSubnet" {
   address_prefixes     = ["10.0.3.0/24"]
 }
 
+resource "azurerm_subnet" "bastionSubnet" {
+  name                 = "AzureBastionSubnet"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.engineering-dev-vnet.name
+  address_prefixes     = ["10.0.4.0/26"]
+}
+
+
 resource "azurerm_network_security_group" "dbSubnet-nsg" {
   name                = "DB-Subnet-NSG"
   location            = var.resource_group_location
@@ -132,3 +140,52 @@ resource "azurerm_subnet_network_security_group_association" "web-association-ns
   subnet_id                 = azurerm_subnet.webSubnet.id
   network_security_group_id = azurerm_network_security_group.webSubnet-nsg.id
 }
+
+
+resource "azurerm_subnet" "bastionSubnet" {
+  name                 = "AzureBastionSubnet"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.engineering-dev-vnet.name
+  address_prefixes     = ["10.0.4.0/26"]
+}
+
+resource "azurerm_network_security_group" "bastionSubnet-nsg" {
+  name                = "Bastion-Subnet-NSG"
+  location            = var.resource_group_location
+  resource_group_name = var.resource_group_name
+
+  security_rule {
+    name                       = "allow-http"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*" # Public
+    destination_address_prefix = "*"        # Bastion Subnet
+  }
+
+  security_rule {
+    name                       = "allow-bastion-to-vpn"
+    priority                   = 110
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"              # Bastion
+    destination_address_prefix = "*" # VirtualNetwork Subnet
+  }
+
+  tags = {
+    environment = "Development"
+    department  = "Engineering"
+  }
+}
+
+resource "azurerm_subnet_network_security_group_association" "bastion-association-nsg" {
+  subnet_id                 = azurerm_subnet.bastionSubnet.id
+  network_security_group_id = azurerm_network_security_group.bastionSubnet-nsg.id
+}
+
