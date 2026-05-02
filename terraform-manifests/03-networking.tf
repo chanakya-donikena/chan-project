@@ -142,12 +142,6 @@ resource "azurerm_subnet_network_security_group_association" "web-association-ns
 }
 
 
-resource "azurerm_subnet" "bastionSubnet" {
-  name                 = "AzureBastionSubnet"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.engineering-dev-vnet.name
-  address_prefixes     = ["10.0.4.0/26"]
-}
 
 resource "azurerm_network_security_group" "bastionSubnet-nsg" {
   name                = "Bastion-Subnet-NSG"
